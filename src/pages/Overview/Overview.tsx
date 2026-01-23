@@ -21,7 +21,7 @@ const Overview = () => {
   }
 
   const handleJobDoubleClick = (jobId: number) => {
-    navigate(`/intelligence?jobId=${jobId}`)
+    navigate(`/test-match-service/intelligence?jobId=${jobId}`)
   }
 
   const getMatchTypeClass = (matchType: string) => {
@@ -188,7 +188,7 @@ const Overview = () => {
               </button>
               <button
                 className="btn-primary"
-                onClick={() => navigate(`/intelligence?jobId=${selectedJob.id}`)}
+                onClick={() => navigate(`/test-match-service/intelligence?jobId=${selectedJob.id}`)}
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M3 3H13V13H3V3Z" stroke="currentColor" strokeWidth="2" fill="none"/>

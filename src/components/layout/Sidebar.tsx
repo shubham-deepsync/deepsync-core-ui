@@ -1,11 +1,16 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const Sidebar = () => {
   const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleGoToPlatform = () => {
+    navigate('/')
+  }
 
   const navItems = [
     {
-      path: '/',
+      path: '/test-match-service',
       label: 'Overview',
       icon: (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -17,7 +22,7 @@ const Sidebar = () => {
       ),
     },
     {
-      path: '/run',
+      path: '/test-match-service/run',
       label: 'Run',
       icon: (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -26,12 +31,21 @@ const Sidebar = () => {
       ),
     },
     {
-      path: '/connections',
+      path: '/test-match-service/connections',
       label: 'Connections',
       icon: (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/>
           <path d="M3 8H17M8 3V17" stroke="currentColor" strokeWidth="2"/>
+        </svg>
+      ),
+    },
+    {
+      path: '/test-match-service/intelligence',
+      label: 'Intelligence',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2L12 8L18 10L12 12L10 18L8 12L2 10L8 8L10 2Z" stroke="currentColor" strokeWidth="2" fill="none"/>
         </svg>
       ),
     },
@@ -42,7 +56,7 @@ const Sidebar = () => {
       <div className="sidebar-header">
         <h1 className="logo">Deep Sync</h1>
       </div>
-      <button className="platform-btn">
+      <button className="platform-btn" onClick={handleGoToPlatform}>
         <span>Go to Platform</span>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M10 2L14 6L10 10M14 6H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -52,17 +66,22 @@ const Sidebar = () => {
         <div className="nav-section">
           <h3 className="nav-section-title">Workflows</h3>
           <ul className="nav-list">
-            {navItems.map((item) => (
-              <li key={item.path}>
-                <Link
-                  to={item.path}
-                  className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
-                >
-                  {item.icon}
-                  <span>{item.label}</span>
-                </Link>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const isActive = item.path === '/test-match-service' 
+                ? location.pathname === '/test-match-service' || location.pathname === '/test-match-service/'
+                : location.pathname === item.path
+              return (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className={`nav-link ${isActive ? 'active' : ''}`}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </div>
       </nav>
