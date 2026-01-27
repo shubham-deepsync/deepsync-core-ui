@@ -4,6 +4,9 @@ import Header from '../../components/layout/Header'
 const Intelligence = () => {
   const [activeTab, setActiveTab] = useState<'clean-data' | 'identity-analysis' | 'enrich-data' | 'full-report'>('clean-data')
   const [distributionTab, setDistributionTab] = useState<'all' | 'selected'>('all')
+  const [enrichDistributionTab, setEnrichDistributionTab] = useState<'all' | 'selected'>('selected')
+  const [enrichSearch, setEnrichSearch] = useState('')
+  const [selectedAttributes] = useState(['Age', 'Gender', 'Income Range', 'Home Owner Status'])
 
   const tabs = [
     { id: 'clean-data', label: 'Clean Data' },
@@ -235,7 +238,14 @@ const Intelligence = () => {
 
               {/* Match Type Distribution */}
               <div className="match-distribution">
-            <h3 className="section-title" style={{ marginBottom: '16px' }}>Match Type Distribution</h3>
+            <div className="match-distribution-header">
+              <h3 className="section-title" style={{ margin: 0 }}>Match Type Distribution</h3>
+              <button type="button" className="match-distribution-chevron" aria-label="Collapse section">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 12L6 8H14L10 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
             <div className="distribution-tabs">
               <button
                 className={`distribution-tab ${distributionTab === 'all' ? 'active' : ''}`}
@@ -330,24 +340,23 @@ const Intelligence = () => {
 
             {/* Right column: Summary Statistics */}
             <div className="identity-analysis-right">
-              <div className="stats-panels stats-panels-vertical">
-                <div className="stat-panel">
+              <div className="stats-panels stats-panels-vertical identity-analysis-stats">
+                <div className="stat-panel stat-panel-centered">
                   <div className="stat-panel-title">TOTAL CUSTOMERS</div>
-                  <div className="stat-panel-value">4,800,000</div>
+                  <div className="stat-panel-value stat-panel-value-block">4,800,000</div>
                   <div className="stat-panel-subtitle">Total records processed</div>
                 </div>
-                <div className="stat-panel">
+                <div className="stat-panel stat-panel-centered">
                   <div className="stat-panel-title">TOTAL CUSTOMERS MATCHED</div>
-                  <div className="stat-panel-value">633,550</div>
-                  <div className="stat-panel-subtitle">13.2% of total customers</div>
+                  <div className="stat-panel-value stat-panel-value-block">633,550</div>
                   <div className="stat-panel-progress">
                     <div className="stat-panel-progress-bar blue" style={{ width: '13.2%' }}></div>
                   </div>
+                  <div className="stat-panel-subtitle">13.2% of total customers</div>
                 </div>
-                <div className="stat-panel">
-                  <div className="stat-panel-title">UNIQUE DEEP SYNC IDs</div>
-                  <div className="stat-panel-value">
-                    579,064
+                <div className="stat-panel stat-panel-highlight stat-panel-centered">
+                  <div className="stat-panel-title stat-panel-title-with-growth">
+                    UNIQUE DEEP SYNC IDs
                     <span className="growth-indicator">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <path d="M6 2L10 6H7V10H5V6H2L6 2Z" fill="currentColor"/>
@@ -355,18 +364,19 @@ const Intelligence = () => {
                       +2.3%
                     </span>
                   </div>
-                  <div className="stat-panel-subtitle">91.4% match rate</div>
+                  <div className="stat-panel-value stat-panel-value-block">579,064</div>
                   <div className="stat-panel-progress">
                     <div className="stat-panel-progress-bar purple" style={{ width: '91.4%' }}></div>
                   </div>
+                  <div className="stat-panel-subtitle">91.4% match rate</div>
                   <div className="stat-panel-details">
                     <div className="stat-detail-item">
                       <span className="stat-detail-label">Households Linked:</span>
-                      <span className="stat-detail-value">536,983 (84.6%)</span>
+                      <span className="stat-detail-value">535,983 (84.6%)</span>
                     </div>
                     <div className="stat-detail-item">
                       <span className="stat-detail-label">Total Identity Nodes:</span>
-                      <span className="stat-detail-value">2,335,418</span>
+                      <span className="stat-detail-value">2,339,418</span>
                     </div>
                     <div className="stat-detail-item">
                       <span className="stat-detail-label">Avg Identifiers per DS_ID:</span>
@@ -447,13 +457,128 @@ const Intelligence = () => {
       {/* Enrich Data Tab Content */}
       {activeTab === 'enrich-data' && (
         <div className="tab-content active">
+          {/* Data Enrichment Explorer Section */}
           <div className="metric-section">
             <div className="section-header">
+              <div className="section-icon purple">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <rect x="4" y="6" width="16" height="3" rx="1" fill="currentColor"/>
+                  <rect x="4" y="10.5" width="16" height="3" rx="1" fill="currentColor"/>
+                  <rect x="4" y="15" width="16" height="3" rx="1" fill="currentColor"/>
+                </svg>
+              </div>
               <div>
-                <h2 className="section-title">Enrich Data</h2>
-                <p className="section-description">Data enrichment and enhancement metrics coming soon.</p>
+                <h2 className="section-title">Data Enrichment Explorer</h2>
+                <p className="section-description">Build custom attribute tables and explore data distributions</p>
               </div>
             </div>
+          </div>
+
+          {/* Match Rank Filter */}
+          <div className="match-rank-filter">
+            <div className="filter-header">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ color: 'var(--text-secondary)' }}>
+                <path d="M4 6H16M4 10H16M4 14H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M6 4L10 8L14 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <h3 className="filter-title">Match Rank Filter</h3>
+              <div className="filter-details">
+                <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>28/28 ranks • 633,550 records</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
+                  <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <div className="filter-links">
+                  <a href="#" className="filter-link">Deselect All</a>
+                  <a href="#" className="filter-link">Show</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Select Attributes */}
+          <div className="enrich-select-attributes metric-section">
+            <div className="select-attributes-header">
+              <h3 className="section-title" style={{ margin: 0 }}>Select Attributes</h3>
+              <span className="select-attributes-count" style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
+                4 of 600+ attributes selected
+              </span>
+            </div>
+            <input
+              type="text"
+              className="enrich-search-input"
+              placeholder="Search from 600+ Deep Sync attributes..."
+              value={enrichSearch}
+              onChange={(e) => setEnrichSearch(e.target.value)}
+            />
+            <div className="attribute-tags">
+              {selectedAttributes.map((attr) => (
+                <span key={attr} className="attribute-tag">
+                  {attr}
+                  <button type="button" className="attribute-tag-remove" aria-label={`Remove ${attr}`}>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 2L10 10M10 2L2 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Custom Attribute Analysis */}
+          <div className="enrich-custom-analysis metric-section">
+            <h3 className="section-title" style={{ marginBottom: '16px' }}>Custom Attribute Analysis</h3>
+            <div className="distribution-tabs">
+              <button
+                className={`distribution-tab ${enrichDistributionTab === 'all' ? 'active' : ''}`}
+                onClick={() => setEnrichDistributionTab('all')}
+              >
+                All Matches
+              </button>
+              <button
+                className={`distribution-tab ${enrichDistributionTab === 'selected' ? 'active' : ''}`}
+                onClick={() => setEnrichDistributionTab('selected')}
+              >
+                Selected Match Types Only
+              </button>
+            </div>
+            <table className="custom-attribute-table metrics-table">
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Fill Rate</th>
+                  <th>Coverage</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { attribute: 'Age', fillRate: 94.2, coverage: 'excellent' },
+                  { attribute: 'Gender', fillRate: 93.8, coverage: 'excellent' },
+                  { attribute: 'Income Range', fillRate: 89.3, coverage: 'good' },
+                  { attribute: 'Home Owner Status', fillRate: 87.6, coverage: 'good' },
+                ].map((row) => (
+                  <tr key={row.attribute}>
+                    <td><strong>{row.attribute}</strong></td>
+                    <td>
+                      <div className="fill-rate-cell">
+                        <span>{row.fillRate}%</span>
+                        <div className="match-rate-bar">
+                          <div className="match-rate-fill enrich-fill" style={{ width: `${row.fillRate}%` }}></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`coverage-badge ${row.coverage}`}>
+                        {row.coverage.charAt(0).toUpperCase() + row.coverage.slice(1)}
+                      </span>
+                    </td>
+                    <td>
+                      <a href="#" className="view-distribution-link">&gt; View Distribution</a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
@@ -461,13 +586,216 @@ const Intelligence = () => {
       {/* Full Report Tab Content */}
       {activeTab === 'full-report' && (
         <div className="tab-content active">
-          <div className="metric-section">
-            <div className="section-header">
-              <div>
-                <h2 className="section-title">Full Report</h2>
-                <p className="section-description">Complete report view coming soon.</p>
+          {/* Full Match Report Header */}
+          <div className="metric-section full-report-header">
+            <div className="section-header" style={{ flexWrap: 'wrap', gap: '16px' }}>
+              <div className="section-icon purple">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="2" fill="none"/>
+                  <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
               </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h2 className="section-title">Full Match Report</h2>
+                <p className="section-description">Comprehensive tabular view of all matching metrics and data quality</p>
+              </div>
+              <button type="button" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                Export Full Report
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
             </div>
+          </div>
+
+          {/* Clean Data & Hygiene — Identity Resolution */}
+          <div className="metric-section">
+            <h2 className="section-title" style={{ marginBottom: '8px' }}>Clean Data & Hygiene</h2>
+            <h3 className="full-report-subsection" style={{ marginBottom: '16px', fontSize: '15px', fontWeight: 600, color: 'var(--text-secondary)' }}>Identity Resolution</h3>
+            <table className="report-table metrics-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                  <th>Percentage</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { metric: 'Records Received', value: '7,160,000', pct: '100%', desc: 'Total number of records submitted' },
+                  { metric: 'Records Removed', value: '2,360,000', pct: '33.0%', desc: 'Total number of records that were removed (cleaned + bad data)' },
+                  { metric: 'Records Processed', value: '4,800,000', pct: '67.0%', desc: 'After deduplication and filtering of "bad" data' },
+                  { metric: 'Records Cleaned', value: '1,840,000', pct: '25.7%', desc: 'Records that Deep Sync was able to standardize and process' },
+                  { metric: 'Bad Data', value: '520,000', pct: '7.3%', desc: 'Data that is either duplicate or unmatchable due to missing data or invalid rows' },
+                ].map((row) => (
+                  <tr key={row.metric}>
+                    <td><strong>{row.metric}</strong></td>
+                    <td><strong>{row.value}</strong></td>
+                    <td>{row.pct}</td>
+                    <td style={{ color: 'var(--text-secondary)' }}>{row.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Address Validation */}
+          <div className="metric-section">
+            <h2 className="section-title" style={{ marginBottom: '16px' }}>Address Validation</h2>
+            <table className="report-table metrics-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                  <th>Percentage</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { metric: 'Total Addresses Processed', value: '4,758,000', pct: '100%', desc: 'Total addresses submitted for validation' },
+                  { metric: 'Total Addresses Matched', value: '4,495,600', pct: '94.5%', desc: 'Successfully validated addresses' },
+                  { metric: 'Updatable Addresses', value: '892,400', pct: '18.8%', desc: 'Addresses that can be updated (Lower is better)' },
+                  { metric: 'Deliverable Addresses', value: '4,495,600', pct: '94.5%', desc: 'USPS validated addresses' },
+                ].map((row) => (
+                  <tr key={row.metric}>
+                    <td><strong>{row.metric}</strong></td>
+                    <td><strong>{row.value}</strong></td>
+                    <td>{row.pct}</td>
+                    <td style={{ color: 'var(--text-secondary)' }}>{row.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Identity Analysis — Identity Resolution & Linking */}
+          <div className="metric-section">
+            <h2 className="section-title" style={{ marginBottom: '8px' }}>Identity Analysis</h2>
+            <h3 className="full-report-subsection" style={{ marginBottom: '16px', fontSize: '15px', fontWeight: 600, color: 'var(--text-secondary)' }}>Identity Resolution & Linking</h3>
+            <table className="report-table metrics-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                  <th>Percentage</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { metric: 'Total Customers', value: '4,800,000', pct: '100%', desc: 'Total records processed' },
+                  { metric: 'Total Customers Matched', value: '456,799', pct: '9.5%', desc: 'Customers successfully matched' },
+                  { metric: 'Unique Deep Sync IDs', value: '417,514', pct: '91.4%', desc: 'Unique Deep Sync identifiers linked' },
+                  { metric: 'Households Linked', value: '386,451', pct: '84.6%', desc: 'Household identifiers linked' },
+                  { metric: 'Total Identity Nodes', value: '1,686,756', pct: '—', desc: 'Total nodes in identity graph' },
+                  { metric: 'Avg Identifiers per DS_ID', value: '4.04', pct: '—', desc: 'Average identifiers per Deep Sync ID' },
+                ].map((row) => (
+                  <tr key={row.metric}>
+                    <td><strong>{row.metric}</strong></td>
+                    <td><strong>{row.value}</strong></td>
+                    <td>{row.pct}</td>
+                    <td style={{ color: 'var(--text-secondary)' }}>{row.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Key metrics block: Total Identity Nodes, Avg Identifiers, Multi-Device Households */}
+          <div className="full-report-kpis metric-section">
+            <div className="full-report-kpi-row">
+              <span className="full-report-kpi-value">1,686,756</span>
+              <span className="full-report-kpi-desc">Total nodes in identity graph</span>
+            </div>
+            <div className="full-report-kpi-row">
+              <span className="full-report-kpi-value">4.04</span>
+              <span className="full-report-kpi-desc">Average identifiers per Deep Sync ID</span>
+            </div>
+            <div className="full-report-kpi-row">
+              <span className="full-report-kpi-value">67.8%</span>
+              <span className="full-report-kpi-desc">Percentage of multi-device households</span>
+            </div>
+          </div>
+
+          {/* Identifier Metrics */}
+          <div className="metric-section">
+            <h2 className="section-title" style={{ marginBottom: '16px' }}>Identifier Metrics</h2>
+            <table className="report-table metrics-table">
+              <thead>
+                <tr>
+                  <th>Attribute Type</th>
+                  <th>Matched</th>
+                  <th>Appended</th>
+                  <th>Total</th>
+                  <th>Match Rate</th>
+                  <th>Avg per Record</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { type: 'Mobile Advertising IDs (MAIDs)', matched: '412,580', appended: '385,420', total: '456,800', rate: '90.3%', avg: '2.4' },
+                  { type: 'IP Addresses', matched: '398,240', appended: '362,180', total: '456,800', rate: '87.2%', avg: '3.1' },
+                  { type: 'UID2s', matched: '298,750', appended: '271,840', total: '456,800', rate: '65.4%', avg: '1.2' },
+                  { type: 'Email Addresses', matched: '412,300', appended: '389,120', total: '456,800', rate: '90.3%', avg: '1.8' },
+                  { type: 'Phones', matched: '421,450', appended: '396,200', total: '456,800', rate: '92.3%', avg: '1.9' },
+                  { type: 'Names', matched: '445,600', appended: '418,300', total: '456,800', rate: '97.5%', avg: '1.1' },
+                  { type: 'Physical Addresses', matched: '410,200', appended: '384,900', total: '456,800', rate: '89.8%', avg: '1.1' },
+                ].map((row) => (
+                  <tr key={row.type}>
+                    <td><strong>{row.type}</strong></td>
+                    <td>{row.matched}</td>
+                    <td>{row.appended}</td>
+                    <td>{row.total}</td>
+                    <td>{row.rate}</td>
+                    <td>{row.avg}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Enrich Data */}
+          <div className="metric-section">
+            <h2 className="section-title" style={{ marginBottom: '4px' }}>Enrich Data</h2>
+            <p className="section-description" style={{ marginBottom: '16px' }}>Selected Attributes (4 of 600+)</p>
+            <table className="report-table metrics-table custom-attribute-table">
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Fill Rate</th>
+                  <th>Coverage</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { attribute: 'Age', fillRate: 94.2, coverage: 'excellent', desc: 'Age demographic data' },
+                  { attribute: 'Gender', fillRate: 93.8, coverage: 'excellent', desc: 'Gender demographic data' },
+                  { attribute: 'Income Range', fillRate: 89.3, coverage: 'good', desc: 'Household income data' },
+                  { attribute: 'Home Owner Status', fillRate: 87.6, coverage: 'good', desc: 'Home ownership status' },
+                ].map((row) => (
+                  <tr key={row.attribute}>
+                    <td><strong>{row.attribute}</strong></td>
+                    <td>
+                      <div className="fill-rate-cell">
+                        <span>{row.fillRate}%</span>
+                        <div className="match-rate-bar">
+                          <div className="match-rate-fill enrich-fill" style={{ width: `${row.fillRate}%` }}></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`coverage-badge ${row.coverage}`}>
+                        {row.coverage.charAt(0).toUpperCase() + row.coverage.slice(1)}
+                      </span>
+                    </td>
+                    <td style={{ color: 'var(--text-secondary)' }}>{row.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
