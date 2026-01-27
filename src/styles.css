@@ -2097,8 +2097,26 @@ body {
 }
 
 .side-panel-content {
-    padding: 24px 0;
-    margin-top: 64px; /* Account for top navigation */
+    padding: 0 0 24px;
+    padding-top: 10px;
+}
+
+.side-panel-logo {
+    padding: 0 4px 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    display: block;
+}
+
+.side-panel-logo-img {
+    width: 100%;
+    height: auto;
+    max-height: 58px;
+    min-height: 44px;
+    object-fit: contain;
+    object-position: left center;
+    display: block;
+    vertical-align: middle;
 }
 
 .side-panel-nav {

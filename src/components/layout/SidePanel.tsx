@@ -54,6 +54,9 @@ const SidePanel = ({ isOpen, onClose }: SidePanelProps) => {
       {isOpen && <div className="side-panel-overlay" onClick={onClose} />}
       <aside className={`side-panel ${isOpen ? 'open' : ''}`}>
         <div className="side-panel-content">
+          <div className="side-panel-logo">
+            <img src="/logo/deep-sync-logo.jpg" alt="Deep Sync" className="side-panel-logo-img" />
+          </div>
           <nav className="side-panel-nav">
             {navItems.map((item) => {
               const active = isActive(item.path)
