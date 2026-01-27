@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authenticating | DeepSync</title>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="auth-container">
+            <h1>Authenticating</h1>
+            <p class="subtitle">Securely exchanging tokens with the identity gateway...</p>
+            <div class="loading-spinner"></div>
+            <p id="status-text">Connecting to server...</p>
+        </div>
+    </div>
+    <script type="module">
+        const BACKEND_URL = 'http://localhost:8000';
+
+        async function handleCallback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const state = urlParams.get('state');
+            const statusText = document.getElementById('status-text');
+
+            if (!code || !state) {
+                statusText.textContent = 'Invalid callback parameters.';
+                setTimeout(() => window.location.href = '/', 2000);
+                return;
+            }
+
+            try {
+                statusText.textContent = 'Exchanging code for credentials...';
+                const response = await fetch(`${BACKEND_URL}/api/v1/auth/callback?code=${code}&state=${state}`);
+                const result = await response.json();
+
+                if (result.status === 'success' && result.data.access_token) {
+                    localStorage.setItem('access_token', result.data.access_token);
+                    statusText.textContent = 'Success! Redirecting to dashboard...';
+                    setTimeout(() => window.location.href = '/', 1000);
+                } else {
+                    statusText.textContent = 'Authentication failed: ' + (result.message || 'Unknown error');
+                    setTimeout(() => window.location.href = '/', 3000);
+                }
+            } catch (error) {
+                console.error('Callback error:', error);
+                statusText.textContent = 'Connection error. Please try again.';
+                setTimeout(() => window.location.href = '/', 3000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', handleCallback);
+    </script>
+</body>
+
+</html>
