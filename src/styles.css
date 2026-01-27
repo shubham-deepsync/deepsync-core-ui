@@ -71,7 +71,7 @@ body {
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.2s;
@@ -2112,4 +2112,193 @@ body {
     .side-panel {
         width: 260px;
     }
+}
+
+/* ============================================
+   Auth flow (login, callback, select-organization)
+   Theme matches dashboard
+   ============================================ */
+
+.auth-flow {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  background: var(--main-bg);
+  color: var(--text-primary);
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.auth-flow .auth-container {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 3rem;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  animation: authFadeIn 0.8s ease-out;
+  text-align: center;
+}
+
+.auth-flow .auth-title {
+  font-size: 3.2em;
+  line-height: 1.1;
+  margin-bottom: 0.5em;
+  background: linear-gradient(to right, var(--primary-blue), var(--primary-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.auth-flow .auth-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.auth-flow .btn-auth {
+  border-radius: 12px;
+  border: 1px solid transparent;
+  padding: 0.8em 1.6em;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.auth-flow .btn-auth-primary {
+  background: var(--primary-blue);
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.auth-flow .btn-auth-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #2563eb;
+}
+
+.auth-flow .btn-auth-secondary {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.auth-flow .btn-auth-secondary:hover {
+  background: #f9fafb;
+  border-color: var(--border-color);
+}
+
+.auth-flow .auth-profile-card {
+  text-align: left;
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.auth-flow .auth-profile-row {
+  display: flex;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.auth-flow .auth-profile-label {
+  width: 120px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.auth-flow .auth-profile-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.auth-flow .auth-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-blue);
+  border-radius: 50%;
+  animation: authSpin 1s linear infinite;
+  margin: 1rem auto;
+}
+
+.auth-flow .auth-organizations-section {
+  text-align: left;
+  margin-top: 2rem;
+}
+
+.auth-flow .auth-organizations-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.auth-flow .auth-organizations-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  background: #f9fafb;
+}
+
+.auth-flow .auth-org-item {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: background 0.2s;
+}
+
+.auth-flow .auth-org-item:hover {
+  background: #eff6ff;
+}
+
+.auth-flow .auth-org-item:last-child {
+  border-bottom: none;
+}
+
+.auth-flow .auth-org-name {
+  font-weight: 600;
+}
+
+.auth-flow .auth-org-id {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+@keyframes authFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes authSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }

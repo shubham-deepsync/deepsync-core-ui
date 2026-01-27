@@ -1,12 +1,23 @@
 import { useState, useEffect } from 'react'
+import { useAuth } from '../../contexts/AuthContext'
 
 interface TopNavigationProps {
   onMenuClick: () => void
 }
 
+function getInitials(userName: string): string {
+  const parts = userName.trim().split(/\s+/)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase().slice(0, 2)
+  }
+  return userName.slice(0, 2).toUpperCase() || '?'
+}
+
 const TopNavigation = ({ onMenuClick }: TopNavigationProps) => {
+  const { authUser } = useAuth()
   const [logoError, setLogoError] = useState(false)
   const logoSrc = '/logo.svg'
+  const userInitials = authUser?.userName ? getInitials(authUser.userName) : '?'
 
   useEffect(() => {
     // Check if logo exists by trying to load it
@@ -61,7 +72,7 @@ const TopNavigation = ({ onMenuClick }: TopNavigationProps) => {
           </svg>
         </button>
         <button className="user-avatar-btn" aria-label="User menu">
-          <span className="user-initials">SM</span>
+          <span className="user-initials">{userInitials}</span>
         </button>
       </div>
     </nav>

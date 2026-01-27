@@ -1,8 +1,12 @@
-import PromotionalBanner from './components/PromotionalBanner'
+import { useAuth } from '../../contexts/AuthContext'
 import ServiceCard from './components/ServiceCard'
 import OrchestratorServices from './components/OrchestratorServices'
 
 const Home = () => {
+  const { authUser } = useAuth()
+  const displayName = authUser?.userName ?? 'User'
+  const orgName = authUser?.orgName
+
   const getGreeting = () => {
     const hour = new Date().getHours()
     if (hour < 12) return 'Good morning'
@@ -11,16 +15,6 @@ const Home = () => {
   }
 
   const serviceCards = [
-    {
-      title: 'Studio',
-      description: 'Build processes, workflows, and agents in a no-code canvas.',
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <rect x="4" y="4" width="24" height="24" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/>
-          <path d="M4 12H28M12 4V28" stroke="currentColor" strokeWidth="2"/>
-        </svg>
-      ),
-    },
     {
       title: 'Agents',
       description: 'Manage the full lifecycle of intelligent agents — from creation and deployment to ongoing monitoring, optimization, and maintenance.',
@@ -33,17 +27,7 @@ const Home = () => {
       ),
     },
     {
-      title: 'Maestro',
-      description: 'Orchestrate automated processes across systems.',
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <path d="M16 4L20 12L28 14L20 16L16 24L12 16L4 14L12 12L16 4Z" stroke="currentColor" strokeWidth="2" fill="none"/>
-          <circle cx="16" cy="16" r="2" fill="currentColor"/>
-        </svg>
-      ),
-    },
-    {
-      title: 'Orchestrator',
+      title: 'Core Platform',
       description: 'Centrally manage and monitor robots and automation resources.',
       icon: (
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -53,15 +37,25 @@ const Home = () => {
         </svg>
       ),
     },
+    {
+      title: 'Test Match Service',
+      description: 'Run match reports, view job history, and analyze match intelligence.',
+      icon: (
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect x="4" y="4" width="10" height="10" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/>
+          <rect x="18" y="4" width="10" height="10" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/>
+          <rect x="4" y="18" width="10" height="10" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/>
+          <rect x="18" y="18" width="10" height="10" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/>
+        </svg>
+      ),
+    },
   ]
 
   return (
     <div className="home-page">
       <div className="home-greeting">
-        <h1>{getGreeting()}, Shubham Mondal</h1>
+        <h1>{getGreeting()}, {displayName}{orgName ? ` from ${orgName}` : ''}</h1>
       </div>
-
-      <PromotionalBanner />
 
       <div className="service-cards-grid">
         {serviceCards.map((service) => (

@@ -57,10 +57,10 @@ const Sidebar = () => {
         <h1 className="logo">Deep Sync</h1>
       </div>
       <button className="platform-btn" onClick={handleGoToPlatform}>
-        <span>Go to Platform</span>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M10 2L14 6L10 10M14 6H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+          <path d="M6 2L2 6L6 10M2 6H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
+        <span>Go to Platform</span>
       </button>
       <nav className="sidebar-nav">
         <div className="nav-section">
@@ -85,14 +85,6 @@ const Sidebar = () => {
           </ul>
         </div>
       </nav>
-      <div className="sidebar-footer">
-        <button className="cookie-btn">
-          Manage cookies or opt out
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        </button>
-      </div>
     </aside>
   )
 }
