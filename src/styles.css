@@ -6,6 +6,12 @@
 }
 
 :root {
+    /* Theme gradient: Tailwind slate-50 → blue-50 → purple-50 (bg-gradient-to-br) */
+    --theme-slate-50: #f8fafc;
+    --theme-blue-50: #eff6ff;
+    --theme-purple-50: #faf5ff;
+    --theme-gradient: linear-gradient(to bottom right, var(--theme-slate-50), var(--theme-blue-50), var(--theme-purple-50));
+
     --sidebar-bg: #1a1f3a;
     --sidebar-hover: #252b4a;
     --sidebar-active: #3b4a7a;
@@ -26,7 +32,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: var(--main-bg);
+    background: var(--theme-gradient);
+    min-height: 100vh;
     color: var(--text-primary);
     line-height: 1.6;
 }
@@ -1272,6 +1279,35 @@ body {
     text-decoration: underline;
 }
 
+/* Identity Analysis tab: left column (sections + chart), right column (summary stats) */
+.identity-analysis-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 24px;
+}
+
+.identity-analysis-left {
+    min-width: 0;
+}
+
+.identity-analysis-right {
+    position: sticky;
+    top: 88px;
+}
+
+.stats-panels-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 0;
+}
+
+.stats-panels-vertical .stat-panel {
+    margin-bottom: 0;
+}
+
 .match-distribution {
     background: var(--card-bg);
     border-radius: 12px;
@@ -1595,6 +1631,14 @@ body {
     .stats-panels {
         grid-template-columns: 1fr;
     }
+
+    .identity-analysis-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .identity-analysis-right {
+        position: static;
+    }
 }
 
 /* ============================================
@@ -1605,7 +1649,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--main-bg);
+    background: var(--theme-gradient);
 }
 
 .parent-main-content {
@@ -2125,7 +2169,7 @@ body {
   display: flex;
   place-items: center;
   justify-content: center;
-  background: var(--main-bg);
+  background: var(--theme-gradient);
   color: var(--text-primary);
   padding: 2rem;
   box-sizing: border-box;

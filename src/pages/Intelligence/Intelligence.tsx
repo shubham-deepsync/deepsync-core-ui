@@ -194,41 +194,48 @@ const Intelligence = () => {
       {/* Identity Analysis Tab Content */}
       {activeTab === 'identity-analysis' && (
         <div className="tab-content active">
-          {/* Identity Resolution & Linking Section */}
-          <div className="metric-section">
-            <div className="section-header">
-              <div className="section-icon purple">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <path d="M8 12H16M12 8V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <div>
-                <h2 className="section-title">Identity Resolution & Linking</h2>
-                <p className="section-description">Match accuracy analysis and identity graph connections</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Match Rank Filter */}
-          <div className="match-rank-filter">
-            <div className="filter-header">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ color: 'var(--text-secondary)' }}>
-                <path d="M2 4H18M4 8H16M6 12H14M8 16H12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              <h3 className="filter-title">Match Rank Filter</h3>
-              <div className="filter-details">
-                <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>28/28 ranks • 633,550 records</span>
-                <div className="filter-links">
-                  <a href="#" className="filter-link">Deselect All</a>
-                  <a href="#" className="filter-link">Show</a>
+          <div className="identity-analysis-layout">
+            {/* Left column: Identity Resolution, Match Rank Filter, Match Type Distribution */}
+            <div className="identity-analysis-left">
+              {/* Identity Resolution & Linking Section */}
+              <div className="metric-section">
+                <div className="section-header">
+                  <div className="section-icon purple">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2L22 8V16L12 22L2 16V8L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none"/>
+                      <path d="M12 8V16M8 12H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="section-title">Identity Resolution & Linking</h2>
+                    <p className="section-description">Match accuracy analysis and identity graph connections</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Match Type Distribution */}
-          <div className="match-distribution">
+              {/* Match Rank Filter */}
+              <div className="match-rank-filter">
+                <div className="filter-header">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ color: 'var(--text-secondary)' }}>
+                    <path d="M2 4H18M4 8H16M6 12H14M8 16H12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  <h3 className="filter-title">Match Rank Filter</h3>
+                  <div className="filter-details">
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>28/28 ranks • 633,560 records</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
+                      <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <div className="filter-links">
+                      <a href="#" className="filter-link">Deselect All</a>
+                      <a href="#" className="filter-link">Show</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Match Type Distribution */}
+              <div className="match-distribution">
+            <h3 className="section-title" style={{ marginBottom: '16px' }}>Match Type Distribution</h3>
             <div className="distribution-tabs">
               <button
                 className={`distribution-tab ${distributionTab === 'all' ? 'active' : ''}`}
@@ -319,60 +326,65 @@ const Intelligence = () => {
               Use the Match Rank Filter above to toggle specific match types and see how they affect the overall distribution and stats.
             </p>
           </div>
+            </div>
 
-          {/* Statistics Panels */}
-          <div className="stats-panels">
-            <div className="stat-panel">
-              <div className="stat-panel-title">TOTAL CUSTOMERS</div>
-              <div className="stat-panel-value">500,000</div>
-              <div className="stat-panel-subtitle">Input records submitted</div>
-            </div>
-            <div className="stat-panel">
-              <div className="stat-panel-title">TOTAL CUSTOMERS MATCHED</div>
-              <div className="stat-panel-value">499,999</div>
-              <div className="stat-panel-subtitle">99.9% of total customers</div>
-              <div className="stat-panel-progress">
-                <div className="stat-panel-progress-bar blue" style={{ width: '99.9%' }}></div>
-              </div>
-            </div>
-            <div className="stat-panel">
-              <div className="stat-panel-title">UNIQUE DEEP SYNC IDs</div>
-              <div className="stat-panel-value">
-                456,999
-                <span className="growth-indicator">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M6 2L10 6H7V10H5V6H2L6 2Z" fill="currentColor"/>
-                  </svg>
-                  +2.3%
-                </span>
-              </div>
-              <div className="stat-panel-subtitle">91.4% match rate</div>
-              <div className="stat-panel-progress">
-                <div className="stat-panel-progress-bar purple" style={{ width: '91.4%' }}></div>
-              </div>
-              <div className="stat-panel-details">
-                <div className="stat-detail-item">
-                  <span className="stat-detail-label">Households Linked:</span>
-                  <span className="stat-detail-value">422,999 (84.6%)</span>
+            {/* Right column: Summary Statistics */}
+            <div className="identity-analysis-right">
+              <div className="stats-panels stats-panels-vertical">
+                <div className="stat-panel">
+                  <div className="stat-panel-title">TOTAL CUSTOMERS</div>
+                  <div className="stat-panel-value">4,800,000</div>
+                  <div className="stat-panel-subtitle">Total records processed</div>
                 </div>
-                <div className="stat-detail-item">
-                  <span className="stat-detail-label">Total Identity Nodes:</span>
-                  <span className="stat-detail-value">1,846,275</span>
+                <div className="stat-panel">
+                  <div className="stat-panel-title">TOTAL CUSTOMERS MATCHED</div>
+                  <div className="stat-panel-value">633,550</div>
+                  <div className="stat-panel-subtitle">13.2% of total customers</div>
+                  <div className="stat-panel-progress">
+                    <div className="stat-panel-progress-bar blue" style={{ width: '13.2%' }}></div>
+                  </div>
                 </div>
-                <div className="stat-detail-item">
-                  <span className="stat-detail-label">Avg Identifiers per DS_ID:</span>
-                  <span className="stat-detail-value">4.04</span>
-                </div>
-                <div className="stat-detail-item">
-                  <span className="stat-detail-label">Multi-Device Households:</span>
-                  <span className="stat-detail-value">67.8%</span>
+                <div className="stat-panel">
+                  <div className="stat-panel-title">UNIQUE DEEP SYNC IDs</div>
+                  <div className="stat-panel-value">
+                    579,064
+                    <span className="growth-indicator">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M6 2L10 6H7V10H5V6H2L6 2Z" fill="currentColor"/>
+                      </svg>
+                      +2.3%
+                    </span>
+                  </div>
+                  <div className="stat-panel-subtitle">91.4% match rate</div>
+                  <div className="stat-panel-progress">
+                    <div className="stat-panel-progress-bar purple" style={{ width: '91.4%' }}></div>
+                  </div>
+                  <div className="stat-panel-details">
+                    <div className="stat-detail-item">
+                      <span className="stat-detail-label">Households Linked:</span>
+                      <span className="stat-detail-value">536,983 (84.6%)</span>
+                    </div>
+                    <div className="stat-detail-item">
+                      <span className="stat-detail-label">Total Identity Nodes:</span>
+                      <span className="stat-detail-value">2,335,418</span>
+                    </div>
+                    <div className="stat-detail-item">
+                      <span className="stat-detail-label">Avg Identifiers per DS_ID:</span>
+                      <span className="stat-detail-value">4.04</span>
+                    </div>
+                    <div className="stat-detail-item">
+                      <span className="stat-detail-label">Multi-Device Households:</span>
+                      <span className="stat-detail-value">67.8%</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Identifier Metrics Table */}
+          {/* Identifier Metrics */}
           <div className="identifier-metrics">
+            <h2 className="section-title" style={{ marginBottom: '16px' }}>Identifier Metrics</h2>
             <div className="distribution-tabs">
               <button
                 className={`distribution-tab ${distributionTab === 'all' ? 'active' : ''}`}
@@ -405,7 +417,7 @@ const Intelligence = () => {
                   { type: 'Mobile Advertising IDs (MAIDs)', matched: '572,219 / 633,550', appended: '534,550', rate: 90.3, avg: 2.4, coverage: 'excellent' },
                   { type: 'Email Addresses', matched: '571,831 / 633,550', appended: '539,682', rate: 90.3, avg: 1.8, coverage: 'excellent' },
                   { type: 'Physical Addresses', matched: '568,919 / 633,550', appended: '533,829', rate: 89.8, avg: 1.1, coverage: 'good' },
-                  { type: 'IP Addresses', matched: '552,331 / 633,550', appended: '502,318', rate: 87.2, avg: 3.1, coverage: 'good' },
+                  { type: 'IP Addresses', matched: '562,331 / 633,550', appended: '502,318', rate: 87.2, avg: 3.1, coverage: 'good' },
                   { type: 'UID2s', matched: '414,345 / 633,550', appended: '377,023', rate: 65.4, avg: 1.2, coverage: 'fair' },
                 ].map((row, index) => (
                   <tr key={index}>

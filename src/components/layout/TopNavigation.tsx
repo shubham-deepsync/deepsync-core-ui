@@ -42,13 +42,13 @@ const TopNavigation = ({ onMenuClick }: TopNavigationProps) => {
           {!logoError && (
             <img 
               src={logoSrc} 
-              alt="DeepSync Automation Cloud" 
+              alt="Deep Sync Cloud Platform" 
               className="logo-image"
               onError={() => setLogoError(true)}
             />
           )}
           {logoError && (
-            <span className="logo-text">DeepSync Automation Cloud</span>
+            <span className="logo-text">Deep Sync Cloud Platform</span>
           )}
         </div>
       </div>

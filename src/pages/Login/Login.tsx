@@ -28,7 +28,7 @@ const Login = () => {
   return (
     <div className="auth-flow">
       <div className="auth-container">
-        <h1 className="auth-title">DeepSync</h1>
+        <h1 className="auth-title">Deep Sync</h1>
         <p className="auth-subtitle">Next-generation enterprise identity management.</p>
         <button
           type="button"
