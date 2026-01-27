@@ -246,6 +246,7 @@ const Intelligence = () => {
                 </svg>
               </button>
             </div>
+
             <div className="distribution-tabs">
               <button
                 className={`distribution-tab ${distributionTab === 'all' ? 'active' : ''}`}
@@ -332,63 +333,61 @@ const Intelligence = () => {
               </div>
             </div>
 
+            {/* Stats inside Match Type Distribution — below Distribution / legend */}
+            <div className="match-distribution-stats match-distribution-stats-vertical">
+              <div className="stat-panel stat-panel-inline">
+                <div className="stat-panel-title">TOTAL CUSTOMERS</div>
+                <div className="stat-panel-value stat-panel-value-block">4,800,000</div>
+                <div className="stat-panel-subtitle">Total records processed</div>
+              </div>
+              <div className="stat-panel stat-panel-inline">
+                <div className="stat-panel-title">TOTAL CUSTOMERS MATCHED</div>
+                <div className="stat-panel-value stat-panel-value-block">633,550</div>
+                <div className="stat-panel-progress">
+                  <div className="stat-panel-progress-bar blue" style={{ width: '13.2%' }}></div>
+                </div>
+                <div className="stat-panel-subtitle">13.2% of total customers</div>
+              </div>
+              <div className="stat-panel stat-panel-inline stat-panel-highlight">
+                <div className="stat-panel-title stat-panel-title-with-growth">
+                  UNIQUE DEEP SYNC IDs
+                  <span className="growth-indicator">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M6 2L10 6H7V10H5V6H2L6 2Z" fill="currentColor"/>
+                    </svg>
+                    +2.3%
+                  </span>
+                </div>
+                <div className="stat-panel-value stat-panel-value-block">579,064</div>
+                <div className="stat-panel-progress">
+                  <div className="stat-panel-progress-bar purple" style={{ width: '91.4%' }}></div>
+                </div>
+                <div className="stat-panel-subtitle">91.4% match rate</div>
+                <div className="stat-panel-details">
+                  <div className="stat-detail-item">
+                    <span className="stat-detail-label">Households Linked:</span>
+                    <span className="stat-detail-value">535,983 (84.6%)</span>
+                  </div>
+                  <div className="stat-detail-item">
+                    <span className="stat-detail-label">Total Identity Nodes:</span>
+                    <span className="stat-detail-value">2,339,418</span>
+                  </div>
+                  <div className="stat-detail-item">
+                    <span className="stat-detail-label">Avg Identifiers per DS_ID:</span>
+                    <span className="stat-detail-value">4.04</span>
+                  </div>
+                  <div className="stat-detail-item">
+                    <span className="stat-detail-label">Multi-Device Households:</span>
+                    <span className="stat-detail-value">67.8%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '14px', marginTop: '16px' }}>
               Use the Match Rank Filter above to toggle specific match types and see how they affect the overall distribution and stats.
             </p>
           </div>
-            </div>
-
-            {/* Right column: Summary Statistics */}
-            <div className="identity-analysis-right">
-              <div className="stats-panels stats-panels-vertical identity-analysis-stats">
-                <div className="stat-panel stat-panel-centered">
-                  <div className="stat-panel-title">TOTAL CUSTOMERS</div>
-                  <div className="stat-panel-value stat-panel-value-block">4,800,000</div>
-                  <div className="stat-panel-subtitle">Total records processed</div>
-                </div>
-                <div className="stat-panel stat-panel-centered">
-                  <div className="stat-panel-title">TOTAL CUSTOMERS MATCHED</div>
-                  <div className="stat-panel-value stat-panel-value-block">633,550</div>
-                  <div className="stat-panel-progress">
-                    <div className="stat-panel-progress-bar blue" style={{ width: '13.2%' }}></div>
-                  </div>
-                  <div className="stat-panel-subtitle">13.2% of total customers</div>
-                </div>
-                <div className="stat-panel stat-panel-highlight stat-panel-centered">
-                  <div className="stat-panel-title stat-panel-title-with-growth">
-                    UNIQUE DEEP SYNC IDs
-                    <span className="growth-indicator">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M6 2L10 6H7V10H5V6H2L6 2Z" fill="currentColor"/>
-                      </svg>
-                      +2.3%
-                    </span>
-                  </div>
-                  <div className="stat-panel-value stat-panel-value-block">579,064</div>
-                  <div className="stat-panel-progress">
-                    <div className="stat-panel-progress-bar purple" style={{ width: '91.4%' }}></div>
-                  </div>
-                  <div className="stat-panel-subtitle">91.4% match rate</div>
-                  <div className="stat-panel-details">
-                    <div className="stat-detail-item">
-                      <span className="stat-detail-label">Households Linked:</span>
-                      <span className="stat-detail-value">535,983 (84.6%)</span>
-                    </div>
-                    <div className="stat-detail-item">
-                      <span className="stat-detail-label">Total Identity Nodes:</span>
-                      <span className="stat-detail-value">2,339,418</span>
-                    </div>
-                    <div className="stat-detail-item">
-                      <span className="stat-detail-label">Avg Identifiers per DS_ID:</span>
-                      <span className="stat-detail-value">4.04</span>
-                    </div>
-                    <div className="stat-detail-item">
-                      <span className="stat-detail-label">Multi-Device Households:</span>
-                      <span className="stat-detail-value">67.8%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 

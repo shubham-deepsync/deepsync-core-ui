@@ -1279,10 +1279,10 @@ body {
     text-decoration: underline;
 }
 
-/* Identity Analysis tab: left column (sections + chart), right column (summary stats) */
+/* Identity Analysis tab: single column, stats + graph inside Match Type Distribution */
 .identity-analysis-layout {
     display: grid;
-    grid-template-columns: 1fr 360px;
+    grid-template-columns: 1fr;
     gap: 24px;
     align-items: start;
     margin-bottom: 24px;
@@ -1292,10 +1292,50 @@ body {
     min-width: 0;
 }
 
-.identity-analysis-right {
-    position: sticky;
-    top: 88px;
-    min-width: 320px;
+/* Stats inside Match Type Distribution — vertical stack */
+.match-distribution-stats {
+    margin-bottom: 24px;
+}
+
+.match-distribution-stats-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.match-distribution-stats .stat-panel-inline {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.match-distribution-stats .stat-panel-inline .stat-panel-value-block {
+    display: block;
+    text-align: center;
+}
+
+.match-distribution-stats .stat-panel-inline .stat-panel-subtitle {
+    text-align: center;
+}
+
+.match-distribution-stats .stat-panel-details .stat-detail-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+}
+
+.match-distribution-stats .stat-panel-details .stat-detail-label {
+    text-align: left;
+}
+
+.match-distribution-stats .stat-panel-details .stat-detail-value {
+    text-align: right;
+    min-width: 80px;
+}
+
+.match-distribution-stats .stat-panel-highlight {
+    background: linear-gradient(135deg, #f5f3ff 0%, #fce7f3 100%);
 }
 
 /* Match Type Distribution: title + collapse chevron */
@@ -1857,10 +1897,6 @@ body {
 
     .identity-analysis-layout {
         grid-template-columns: 1fr;
-    }
-
-    .identity-analysis-right {
-        position: static;
     }
 }
 
