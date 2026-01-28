@@ -11,6 +11,7 @@ import Overview from './pages/Overview/Overview'
 import RunMatchReport from './pages/RunMatchReport/RunMatchReport'
 import Connections from './pages/Connections/Connections'
 import Intelligence from './pages/Intelligence/Intelligence'
+import PreparingMatchReport from './pages/PreparingMatchReport/PreparingMatchReport'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route index element={<Overview />} />
             <Route path="run" element={<RunMatchReport />} />
             <Route path="connections" element={<Connections />} />
+            <Route path="preparing-report" element={<PreparingMatchReport />} />
             <Route path="intelligence" element={<Intelligence />} />
           </Route>
         </Route>

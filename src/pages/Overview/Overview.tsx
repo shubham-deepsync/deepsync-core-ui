@@ -7,6 +7,7 @@ import KpiCard from './components/KpiCard'
 import SectionHeader from './components/SectionHeader'
 import FilterPills, { type MatchTypeFilter } from './components/FilterPills'
 import MatchHistoryTable from './components/MatchHistoryTable'
+import JobDetailsPanel from './components/JobDetailsPanel'
 
 const Overview = () => {
   const navigate = useNavigate()
@@ -74,6 +75,7 @@ const Overview = () => {
   )
 
   return (
+    <>
     <div className="overview">
       <Header
         title="Overview"
@@ -126,6 +128,15 @@ const Overview = () => {
         />
       </section>
     </div>
+
+    {selectedJob && selectedJob.status === 'completed' && (
+      <JobDetailsPanel
+        job={selectedJob}
+        onClose={() => setSelectedJob(null)}
+        onViewFullReport={() => navigate(`/test-match-service/preparing-report?jobId=${selectedJob.id}`)}
+      />
+    )}
+    </>
   )
 }
 
