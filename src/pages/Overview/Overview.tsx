@@ -1,251 +1,131 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Header from '../../components/layout/Header'
-import { mockJobs, mockKpiData } from '../../utils/constants'
+import { mockJobs, mockKpiCards } from '../../utils/constants'
 import { Job } from '../../types'
+import KpiCard from './components/KpiCard'
+import SectionHeader from './components/SectionHeader'
+import FilterPills, { type MatchTypeFilter } from './components/FilterPills'
+import MatchHistoryTable from './components/MatchHistoryTable'
 
 const Overview = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
+  const [matchTypeFilters, setMatchTypeFilters] = useState<MatchTypeFilter[]>([])
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
 
   const filteredJobs = mockJobs.filter((job) => {
-    const matchesSearch = job.fileName.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === 'all' || job.status === statusFilter
-    return matchesSearch && matchesStatus
+    const matchesSearch =
+      job.fileName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.processedDate.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.matchType.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesType =
+      matchTypeFilters.length === 0 || matchTypeFilters.includes(job.matchType)
+    return matchesSearch && matchesType
   })
 
-  const handleJobSelect = (job: Job) => {
-    setSelectedJob(job)
-  }
-
+  const handleJobSelect = (job: Job) => setSelectedJob(job)
   const handleJobDoubleClick = (jobId: number) => {
     navigate(`/test-match-service/intelligence?jobId=${jobId}`)
   }
 
-  const getMatchTypeClass = (matchType: string) => {
-    return matchType.toLowerCase()
+  const toggleMatchType = (type: MatchTypeFilter) => {
+    setMatchTypeFilters((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    )
   }
+  const clearFilters = () => setMatchTypeFilters([])
 
-  const getStatusClass = (status: string) => {
-    return status
-  }
+  const headerActions = (
+    <div className="header-actions">
+      <button className="nav-icon-btn" type="button" aria-label="Notifications">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2C8.9 2 8 2.9 8 4V5.5C6.2 6.1 5 7.7 5 9.5V13L3 15V16H17V15L15 13V9.5C15 7.7 13.8 6.1 12 5.5V4C12 2.9 11.1 2 10 2Z" fill="currentColor" />
+        </svg>
+      </button>
+      <button className="nav-icon-btn" type="button" aria-label="Bookmark">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M5 2H15V18L10 15L5 18V2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <button className="nav-icon-btn" type="button" aria-label="Help">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+          <path d="M10 7V10M10 13H10.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      </button>
+    </div>
+  )
+
+  const clockIcon = (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+      <path d="M10 6V10L13 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  )
+
+  const startNewAnalysisAction = (
+    <Link to="/test-match-service/run" className="btn-primary btn-start-analysis">
+      <span>Start New Analysis</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+        <path d="M6 4L12 8L6 12V4Z" fill="currentColor" />
+      </svg>
+    </Link>
+  )
 
   return (
-    <>
+    <div className="overview">
       <Header
         title="Overview"
-        subtitle="View and access previous match reports. Double-click any job to view its full report."
+        subtitle="Track your match analysis jobs and performance metrics."
+        actions={headerActions}
       />
 
-      {/* KPI Cards */}
-      <div className="kpi-cards">
-        <div className="kpi-card">
-          <div className="kpi-icon green">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <div className="kpi-content">
-            <h3 className="kpi-label">Total Jobs Completed</h3>
-            <p className="kpi-value">{mockKpiData.totalJobsCompleted}</p>
-          </div>
-        </div>
-        <div className="kpi-card">
-          <div className="kpi-icon blue">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <div className="kpi-content">
-            <h3 className="kpi-label">Total Records Processed</h3>
-            <p className="kpi-value">{mockKpiData.totalRecordsProcessed.toLocaleString()}</p>
-          </div>
-        </div>
-        <div className="kpi-card">
-          <div className="kpi-icon purple">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <div className="kpi-content">
-            <h3 className="kpi-label">Average Match Rate</h3>
-            <p className="kpi-value">{mockKpiData.averageMatchRate}%</p>
-          </div>
-        </div>
-      </div>
+      <section className="kpi-cards" aria-label="Key metrics">
+        {mockKpiCards.map((card) => (
+          <KpiCard key={card.label} card={card} />
+        ))}
+      </section>
 
-      {/* Job List Section */}
-      <div className="content-section">
-        <div className="table-controls">
-          <div className="search-box">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="2" fill="none"/>
-              <path d="M15 15L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-            <input
-              type="text"
-              placeholder="Search by file name..."
-              className="search-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="filter-group">
-            <button className="filter-btn">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M2 4H14M4 8H12M6 12H10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            </button>
-            <select
-              className="status-filter"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="all">All Status</option>
-              <option value="completed">Completed</option>
-              <option value="processing">Processing</option>
-              <option value="failed">Failed</option>
-            </select>
-          </div>
+      <section className="match-history-section content-section" aria-labelledby="match-history-title">
+        <SectionHeader
+          titleId="match-history-title"
+          title="My Match History"
+          count={filteredJobs.length}
+          countLabel="jobs"
+          action={startNewAnalysisAction}
+          icon={clockIcon}
+        />
+
+        <div className="search-box match-history-search">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="2" fill="none" />
+            <path d="M15 15L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          <input
+            type="search"
+            placeholder="Search by file name, date, or match type..."
+            className="search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            aria-label="Search match history"
+          />
         </div>
 
-        <div className="table-container">
-          <table className="jobs-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>ID</th>
-                <th>File Name</th>
-                <th>Match Type</th>
-                <th>Processed Date</th>
-                <th>Match Rate</th>
-                <th>Status</th>
-                <th>Exported</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredJobs.map((job) => (
-                <tr
-                  key={job.id}
-                  className={`job-row ${selectedJob?.id === job.id ? 'selected' : ''}`}
-                  onClick={() => handleJobSelect(job)}
-                  onDoubleClick={() => handleJobDoubleClick(job.id)}
-                >
-                  <td>
-                    <input
-                      type="radio"
-                      name="job-select"
-                      checked={selectedJob?.id === job.id}
-                      onChange={() => handleJobSelect(job)}
-                    />
-                  </td>
-                  <td>{job.id}</td>
-                  <td>{job.fileName}</td>
-                  <td>
-                    <span className={`match-type-tag ${getMatchTypeClass(job.matchType)}`}>
-                      {job.matchType}
-                    </span>
-                  </td>
-                  <td>
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ display: 'inline-block', marginRight: '4px' }}>
-                      <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                      <path d="M7 4V7L9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                    </svg>
-                    {job.processedDate}
-                  </td>
-                  <td>{job.matchRate}</td>
-                  <td>
-                    <span className={`status-badge ${getStatusClass(job.status)}`}>
-                      {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`export-status ${job.exported ? 'yes' : 'no'}`}>
-                      {job.exported ? 'Yes' : 'No'}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <FilterPills
+          selected={matchTypeFilters}
+          onToggle={toggleMatchType}
+          onClear={clearFilters}
+        />
 
-      {/* Job Details Panel */}
-      {selectedJob && (
-        <div className="job-details-panel">
-          <div className="panel-header">
-            <h2 className="panel-title">{selectedJob.fileName}</h2>
-            <div className="panel-actions">
-              <button className="btn-secondary">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 2V14M2 8H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-                Export Job
-              </button>
-              <button
-                className="btn-primary"
-                onClick={() => navigate(`/test-match-service/intelligence?jobId=${selectedJob.id}`)}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 3H13V13H3V3Z" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  <path d="M5 5H11M5 8H11M5 11H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-                View Full Report
-              </button>
-            </div>
-          </div>
-          <div className="panel-content">
-            <div className="detail-cards">
-              <div className="detail-card">
-                <h3 className="detail-card-title">Summary</h3>
-                <div className="detail-item">
-                  <span className="detail-label">Total Records:</span>
-                  <span className="detail-value">500,000</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">Matched Records:</span>
-                  <span className="detail-value">457,000</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">Match Rate:</span>
-                  <span className="detail-value">{selectedJob.matchRate}</span>
-                </div>
-              </div>
-              <div className="detail-card">
-                <h3 className="detail-card-title">Source Details</h3>
-                <div className="detail-item">
-                  <span className="detail-label">Source Name:</span>
-                  <span className="detail-value">Snowflake</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">Source Path:</span>
-                  <span className="detail-value">s3://snowflake/{selectedJob.fileName}</span>
-                </div>
-              </div>
-              <div className="detail-card">
-                <h3 className="detail-card-title">Export Details</h3>
-                <div className="detail-item">
-                  <span className="detail-label">Destination Name:</span>
-                  <span className="detail-value">AWS S3</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">Destination Path:</span>
-                  <span className="detail-value">s3://exports/{selectedJob.fileName}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label">Export Date:</span>
-                  <span className="detail-value">2024-12-28 15:00:00</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+        <MatchHistoryTable
+          jobs={filteredJobs}
+          selectedJob={selectedJob}
+          onSelect={handleJobSelect}
+          onDoubleClick={handleJobDoubleClick}
+        />
+      </section>
+    </div>
   )
 }
 

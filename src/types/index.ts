@@ -6,6 +6,20 @@ export interface Job {
   matchRate: string | number
   status: 'completed' | 'processing' | 'failed'
   exported: boolean
+  fileSize?: string
+  recordCount?: number
+}
+
+export type KpiIconVariant = 'checkmark' | 'barChart' | 'target'
+
+export interface KpiCardData {
+  value: string
+  label: string
+  trendText: string
+  trendPercent: string
+  trendDirection: 'up' | 'down'
+  iconVariant: KpiIconVariant
+  trendColor?: 'green' | 'purple'
 }
 
 export interface Connection {
@@ -26,4 +40,8 @@ export interface KpiData {
   totalJobsCompleted: number
   totalRecordsProcessed: number
   averageMatchRate: number
+}
+
+export interface KpiDataWithTrends {
+  cards: KpiCardData[]
 }

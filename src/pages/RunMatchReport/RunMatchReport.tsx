@@ -1,25 +1,30 @@
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Header from '../../components/layout/Header'
-import { mockConnections } from '../../utils/constants'
 
 const RunMatchReport = () => {
-  const [selectedSource, setSelectedSource] = useState('')
+  const navigate = useNavigate()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const allowedExtensions = ['.csv', '.xls', '.xlsx', '.parquet', '.json']
+  const allowedTypes = [
+    'text/csv',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/json',
+  ]
+
   const handleFileSelect = (file: File) => {
-    const allowedTypes = ['text/csv', 'application/vnd.ms-excel', 
-                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
-    const allowedExtensions = ['.csv', '.xls', '.xlsx', '.parquet']
-    
-    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
-    
-    if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
-      alert('Please upload a CSV, XLS, XLSX, or Parquet file')
+    const ext = '.' + file.name.split('.').pop()?.toLowerCase()
+    if (
+      !allowedTypes.includes(file.type) &&
+      !allowedExtensions.includes(ext)
+    ) {
+      alert('Please upload a CSV, Excel, or JSON file')
       return
     }
-    
     setSelectedFile(file)
   }
 
@@ -35,14 +40,12 @@ const RunMatchReport = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(false)
-    
     const files = e.dataTransfer.files
-    if (files.length > 0) {
-      handleFileSelect(files[0])
-    }
+    if (files.length > 0) handleFileSelect(files[0])
   }
 
-  const handleBrowseClick = () => {
+  const handleBrowseClick = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
     fileInputRef.current?.click()
   }
 
@@ -52,147 +55,142 @@ const RunMatchReport = () => {
     }
   }
 
+  const handleGetStartedConnected = () => {
+    navigate('/test-match-service/connections')
+  }
+
+  const headerActions = (
+    <div className="header-actions">
+      <button className="nav-icon-btn" type="button" aria-label="Notifications">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2C8.9 2 8 2.9 8 4V5.5C6.2 6.1 5 7.7 5 9.5V13L3 15V16H17V15L15 13V9.5C15 7.7 13.8 6.1 12 5.5V4C12 2.9 11.1 2 10 2Z" fill="currentColor" />
+        </svg>
+        <span className="notification-dot" aria-hidden />
+      </button>
+      <button className="nav-icon-btn" type="button" aria-label="Bookmark">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M5 2H15V18L10 15L5 18V2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <button className="nav-icon-btn" type="button" aria-label="Help">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+          <path d="M10 7V10M10 13H10.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      </button>
+    </div>
+  )
+
   return (
-    <>
+    <div className="run-page">
       <Header
-        title="Run Match Report"
-        subtitle="Import your customer data to generate a comprehensive match report."
+        title="Run Match Analysis"
+        subtitle="Import data and start a new match analysis workflow"
+        actions={headerActions}
       />
 
-      {/* Import Data Section */}
-      <div className="content-section">
-        <div className="section-header">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--primary-blue)' }}>
-            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <div>
-            <h2 className="section-title">Import Data</h2>
-            <p className="section-description">Select a data source to begin.</p>
-          </div>
-        </div>
-
-        {/* Import from Connected Source */}
-        <div style={{ marginBottom: '32px' }}>
-          <label className="form-label" style={{ marginBottom: '12px' }}>Import from Connected Source</label>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end' }}>
-            <div style={{ flex: 1 }}>
-              <select
-                className="form-input"
-                value={selectedSource}
-                onChange={(e) => setSelectedSource(e.target.value)}
-              >
-                <option value="">-- Select a source --</option>
-                {mockConnections.map((conn) => (
-                  <option key={conn.id} value={conn.id}>
-                    {conn.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <button
-              className="btn-secondary"
-              style={{ opacity: selectedSource ? 1 : 0.5, cursor: selectedSource ? 'pointer' : 'not-allowed' }}
-              disabled={!selectedSource}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect x="3" y="3" width="10" height="10" rx="1" stroke="currentColor" strokeWidth="2" fill="none"/>
-                <path d="M3 8H13M8 3V13" stroke="currentColor" strokeWidth="2"/>
+      <div className="run-cards">
+        <div className="run-import-card">
+          <span className="run-card-pill run-card-pill--recommended">
+            <span className="run-card-pill-dot" aria-hidden />
+            Recommended
+          </span>
+          <div className="run-import-card-inner">
+            <div className="run-import-card-icon" aria-hidden>
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
+                <path d="M3 9H21M9 3V21" stroke="currentColor" strokeWidth="2" />
               </svg>
-              Import from Source
-            </button>
-          </div>
-        </div>
-
-        {/* Upload Local Files */}
-        <div>
-          <label className="form-label" style={{ marginBottom: '12px' }}>Upload Local Files</label>
-          <div
-            className={`upload-area ${isDragging ? 'dragover' : ''}`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            onClick={handleBrowseClick}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".csv,.xls,.xlsx,.parquet"
-              style={{ display: 'none' }}
-              onChange={handleFileInputChange}
-            />
-            {selectedFile ? (
-              <div style={{ textAlign: 'center' }}>
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style={{ marginBottom: '12px', color: '#10b981' }}>
-                  <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </div>
+            <div className="run-import-card-content">
+              <h2 className="run-import-card-title">Import from Connected Source</h2>
+              <p className="run-import-card-desc">
+                Pull data directly from your configured data sources like Snowflake, Databricks, or S3 for seamless integration
+              </p>
+              <button
+                type="button"
+                className="run-import-card-btn"
+                onClick={handleGetStartedConnected}
+              >
+                <span>Get Started</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                  <path d="M6 4L12 8L6 12V4Z" fill="currentColor" />
                 </svg>
-                <p style={{ fontWeight: 600, marginBottom: '4px' }}>{selectedFile.name}</p>
-                <p style={{ color: '#6b7280', fontSize: '14px' }}>
-                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                </p>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className={`run-upload-card ${isDragging ? 'run-upload-card--dragover' : ''}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={() => !selectedFile && handleBrowseClick()}
+        >
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv,.xls,.xlsx,.parquet,.json"
+            className="run-upload-input"
+            onChange={handleFileInputChange}
+          />
+          {selectedFile ? (
+            <div className="run-upload-selected">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" className="run-upload-success-icon">
+                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+              <p className="run-upload-filename">{selectedFile.name}</p>
+              <p className="run-upload-filesize">
+                {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="run-upload-icon" aria-hidden>
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
-            ) : (
-              <>
-                <div className="upload-icon">
-                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <p className="upload-text">Drag and drop your file here</p>
-                <p className="upload-hint">or</p>
-                <button
-                  className="browse-btn"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleBrowseClick()
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V12C4 12.5304 4.21071 13.0391 4.58579 13.4142C4.96086 13.7893 5.46957 14 6 14H14C14.5304 14 15.0391 13.7893 15.4142 13.4142C15.7893 13.0391 16 12.5304 16 12V4C16 3.46957 15.7893 2.96086 15.4142 2.58579C15.0391 2.21071 14.5304 2 14 2Z" stroke="currentColor" strokeWidth="2" fill="none"/>
-                  </svg>
-                  Browse Files
-                </button>
-                <p style={{ marginTop: '16px', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                  Supports CSV, XLS, XLSX, Parquet files.
-                </p>
-              </>
-            )}
-          </div>
-          <div style={{ marginTop: '16px' }}>
-            <a href="#" style={{ color: 'var(--primary-blue)', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
-              Use Sample Data
-            </a>
-          </div>
+              <h2 className="run-upload-card-title">Upload File</h2>
+              <p className="run-upload-card-desc">
+                Drag and drop or browse for CSV, Excel, or JSON files
+              </p>
+              <button
+                type="button"
+                className="run-upload-choose-btn"
+                onClick={(e) => handleBrowseClick(e)}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Choose File
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-      {/* How It Works Section */}
-      <div className="content-section how-it-works">
-        <h2 className="how-it-works-title">How It Works</h2>
-        <div className="steps">
-          <div className="step">
-            <div className="step-circle step-1 active">1</div>
-            <h3 className="step-title">Import Data</h3>
-            <p className="step-description">Select your source and import customer records.</p>
+      <section className="getting-started-section" aria-labelledby="getting-started-title">
+        <h2 id="getting-started-title" className="getting-started-title">
+          Getting Started
+        </h2>
+        <div className="getting-started-grid">
+          <div className="getting-started-item">
+            <h3 className="getting-started-item-title">Connected Source</h3>
+            <p className="getting-started-item-desc">
+              Connects to your configured data warehouse or cloud storage for automated data pulls.
+            </p>
           </div>
-          <div className="step">
-            <div className="step-circle step-2 active">2</div>
-            <h3 className="step-title">Map Columns</h3>
-            <p className="step-description">Map your data fields to Deep Sync identifiers.</p>
-          </div>
-          <div className="step">
-            <div className="step-circle step-3 active">3</div>
-            <h3 className="step-title">Deep Sync Matches</h3>
-            <p className="step-description">Our AI-powered engine matches and enhances your records.</p>
-          </div>
-          <div className="step">
-            <div className="step-circle step-4 active">4</div>
-            <h3 className="step-title">Get Insights</h3>
-            <p className="step-description">Review comprehensive metrics and export enhanced data.</p>
+          <div className="getting-started-item">
+            <h3 className="getting-started-item-title">File Upload</h3>
+            <p className="getting-started-item-desc">
+              Upload individual files for one-time analysis. Supports CSV, Excel, and JSON formats.
+            </p>
           </div>
         </div>
-      </div>
-    </>
+      </section>
+    </div>
   )
 }
 
